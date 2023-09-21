@@ -24,7 +24,8 @@ class _MainAppState extends State<MainApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BlocProvider<SplashBloc>(
-          create: (context) => SplashBloc(DB.instance())..add(AutoSignIn()),
+          create: (context) =>
+              SplashBloc(DB.instance())..add(GetSignInCredential()),
           child: const SplashScreen()),
     );
   }

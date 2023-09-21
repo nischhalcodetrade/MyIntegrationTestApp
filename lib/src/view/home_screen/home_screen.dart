@@ -4,6 +4,7 @@ import 'package:integration_test_example_app/src/controller/bloc/home/home_bloc.
 import 'package:integration_test_example_app/src/controller/bloc/home/home_event.dart';
 import 'package:integration_test_example_app/src/controller/bloc/home/home_state.dart';
 import 'package:integration_test_example_app/src/controller/bloc/sign_in/sign_in_bloc.dart';
+import 'package:integration_test_example_app/src/controller/bloc/sign_in/sign_in_event.dart';
 import 'package:integration_test_example_app/src/controller/db/db.dart';
 import 'package:integration_test_example_app/src/model/user_model.dart';
 import 'package:integration_test_example_app/src/view/auth/sign_in/sign_in_screen.dart';
@@ -20,7 +21,8 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () => context.read<HomeBloc>().add(SignOut()),
+              onPressed: () =>
+                  context.read<HomeBloc>().add(SignOut(user.userName)),
               icon: const Icon(Icons.logout))
         ],
       ),
@@ -31,7 +33,7 @@ class HomeScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlocProvider(
-                      create: (context) => SignInBloc(DB.instance()),
+                      create: (context) => SignInBloc(DB.instance())..add(GetSignInCredential()),
                       child: const SignInScreen()),
                 ));
           } else if (state is SignOutFailed) {

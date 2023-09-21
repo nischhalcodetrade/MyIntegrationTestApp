@@ -1,7 +1,8 @@
 abstract class HomeEvent {}
 
 class SignOut extends HomeEvent {
-  SignOut();
+  SignOut(this.userName);
+  final String userName;
 }
 
 class DeleteUser extends HomeEvent {
