@@ -87,9 +87,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 MyTextFormField(
                   controller: userNameController,
-                  hintText: 'User Name',
+                  hintText: 'Username',
                   validator: (value) =>
-                      value != '' ? null : 'Please Enter a valid User Name',
+                      value != '' ? null : 'Please Enter a valid Username',
                 ),
                 MyTextFormField(
                   controller: passwordController,

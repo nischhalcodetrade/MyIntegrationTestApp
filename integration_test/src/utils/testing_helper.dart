@@ -8,6 +8,11 @@ import 'package:integration_test_example_app/main.dart';
 class TestHelper {
   static late WidgetTester tester;
 
+  static Future<void> pumpApp() async {
+    await tester.pumpWidget(const MainApp());
+    await tester.pumpAndSettle(const Duration(seconds: 4));
+  }
+
   static Future<void> enterDataInTextField(
       {String name = '',
       required String data,
@@ -40,6 +45,24 @@ class TestHelper {
       if (retry != 0) {
         tapButton(name: name, retry: --retry, finder: finder, at: at);
       }
+    }
+  }
+
+  static Future<void> selectDataInDropdown<T>({
+    String name = '',
+  }) async {
+    try {
+      var dropdown =
+          find.widgetWithText(DropdownButtonFormField<T>, name).at(0);
+      await tester.ensureVisible(dropdown);
+      await tester.pumpAndSettle();
+      await tester.tap(dropdown, warnIfMissed: false);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.tap(find.bySubtype<DropdownMenuItem<T>>().first,
+          warnIfMissed: false);
+      await tester.pumpAndSettle();
+    } catch (ex) {
+      log(ex.toString());
     }
   }
 

@@ -81,7 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: userNameController,
                   hintText: 'Username',
                   validator: (value) =>
-                      value != '' ? null : 'Please Enter a valid User Name',
+                      value != '' ? null : 'Please Enter a valid Username',
                 ),
                 MyTextFormField(
                   controller: firstNameController,
