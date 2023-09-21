@@ -33,7 +33,8 @@ class HomeScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlocProvider(
-                      create: (context) => SignInBloc(DB.instance())..add(GetSignInCredential()),
+                      create: (context) =>
+                          SignInBloc(DB.instance())..add(GetSignInCredential()),
                       child: const SignInScreen()),
                 ));
           } else if (state is SignOutFailed) {
@@ -46,45 +47,46 @@ class HomeScreen extends StatelessWidget {
                     Text("${state.error.title}: ${state.error.description}")));
           }
         },
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 300,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Username'),
-                            Text('First Name'),
-                            Text('Last Name'),
-                            Text('Gender'),
-                            Text('Date of Birth'),
-                            Text('Password'),
-                          ]),
-                      Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(user.userName),
-                            Text(user.firstName),
-                            Text(user.lastName),
-                            Text('${user.gender}'),
-                            Text('${user.dob}'),
-                            Text(user.password),
-                          ]),
-                    ]),
-              ),
-              MyButton(
-                text: 'Delete User',
-                onPressed: () =>
-                    context.read<HomeBloc>().add(DeleteUser(user.userName)),
-              )
-            ],
-          ),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 200,
+            ),
+            SizedBox(
+              height: 300,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Username'),
+                          Text('First Name'),
+                          Text('Last Name'),
+                          Text('Gender'),
+                          Text('Date of Birth'),
+                          Text('Password'),
+                        ]),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(user.userName),
+                          Text(user.firstName),
+                          Text(user.lastName),
+                          Text('${user.gender}'),
+                          Text('${user.dob}'),
+                          Text(user.password),
+                        ]),
+                  ]),
+            ),
+            MyButton(
+              text: 'Delete User',
+              onPressed: () =>
+                  context.read<HomeBloc>().add(DeleteUser(user.userName)),
+            )
+          ],
         ),
       ),
     );

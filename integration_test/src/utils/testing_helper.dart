@@ -19,10 +19,7 @@ class TestHelper {
       Finder? finder,
       int at = 0}) async {
     try {
-      var textfield = finder ??
-          ((name != '')
-              ? find.widgetWithText(TextField, name).at(at)
-              : find.byType(TextField).at(at));
+      var textfield = finder ?? find.widgetWithText(TextField, name).at(at);
       await tester.ensureVisible(textfield);
       await tester.pumpAndSettle();
       await tester.tap(textfield, warnIfMissed: false);
@@ -64,15 +61,6 @@ class TestHelper {
     } catch (ex) {
       log(ex.toString());
     }
-  }
-
-  static Future<void> pageBack() async {
-    Navigator.of(navigatorKey.currentContext!).pop();
-    await tester.pumpAndSettle();
-  }
-
-  static Future<void> selectRadioButton(String value, {int at = 0}) async {
-    await tapButton(finder: find.textContaining(value).at(at));
   }
 
   static Future<void> customExpect(
