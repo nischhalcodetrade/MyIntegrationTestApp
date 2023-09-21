@@ -6,6 +6,11 @@ class MyButton extends StatelessWidget {
   final void Function() onPressed;
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: onPressed, child: Text(text));
+    return ElevatedButton(
+        onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+          onPressed();
+        },
+        child: Text(text));
   }
 }

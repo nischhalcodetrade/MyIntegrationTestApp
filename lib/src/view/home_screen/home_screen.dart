@@ -10,19 +10,31 @@ import 'package:integration_test_example_app/src/model/user_model.dart';
 import 'package:integration_test_example_app/src/view/auth/sign_in/sign_in_screen.dart';
 import 'package:integration_test_example_app/src/view/widgets/buttons/my_button.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.user});
   final UserModel user;
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hi ${user.firstName} ${user.lastName}'),
+        title: Text('Hi ${widget.user.firstName} ${widget.user.lastName}'),
         centerTitle: true,
         actions: [
           IconButton(
               onPressed: () =>
-                  context.read<HomeBloc>().add(SignOut(user.userName)),
+                  context.read<HomeBloc>().add(SignOut(widget.user.userName)),
               icon: const Icon(Icons.logout))
         ],
       ),
@@ -48,12 +60,11 @@ class HomeScreen extends StatelessWidget {
           }
         },
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 200,
-            ),
-            SizedBox(
-              height: 300,
+            ConstrainedBox(
+              constraints:
+                  BoxConstraints.tight(const Size(double.infinity, 300)),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -72,19 +83,20 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(user.userName),
-                          Text(user.firstName),
-                          Text(user.lastName),
-                          Text('${user.gender}'),
-                          Text('${user.dob}'),
-                          Text(user.password),
+                          Text(widget.user.userName),
+                          Text(widget.user.firstName),
+                          Text(widget.user.lastName),
+                          Text('${widget.user.gender}'),
+                          Text('${widget.user.dob}'),
+                          Text(widget.user.password),
                         ]),
                   ]),
             ),
             MyButton(
               text: 'Delete User',
-              onPressed: () =>
-                  context.read<HomeBloc>().add(DeleteUser(user.userName)),
+              onPressed: () => context
+                  .read<HomeBloc>()
+                  .add(DeleteUser(widget.user.userName)),
             )
           ],
         ),
