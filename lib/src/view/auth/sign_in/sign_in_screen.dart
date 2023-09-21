@@ -15,8 +15,8 @@ import 'package:integration_test_example_app/src/view/widgets/text_fields/my_tex
 import '../../../controller/bloc/home/home_bloc.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
-
+  const SignInScreen({super.key, this.signInModel});
+  final SignInModel? signInModel;
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
@@ -31,10 +31,29 @@ class _SignInScreenState extends State<SignInScreen> {
   bool isRememberMe = false;
 
   @override
+  void initState() {
+    if (widget.signInModel != null) {
+      userNameController.text = widget.signInModel!.userName;
+      passwordController.text = widget.signInModel!.password;
+      setState(() {
+        isRememberMe = widget.signInModel!.isRememberMe;
+      });
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<SignInBloc, SignInState>(
         listener: (context, state) {
+          if (state is GetSignInCredentialSuccess) {
+            userNameController.text = state.signInModel.userName;
+            passwordController.text = state.signInModel.password;
+            setState(() {
+              isRememberMe = state.signInModel.isRememberMe;
+            });
+          }
           if (state is SignInSuccess) {
             Navigator.pushReplacement(
                 context,
@@ -113,6 +132,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         context.read<SignInBloc>().add(SignIn(SignInModel(
+                            alreadySignedIn: true,
                             isRememberMe: isRememberMe,
                             userName: userNameController.text,
                             password: passwordController.text)));

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:integration_test_example_app/src/controller/bloc/sign_in/sign_in_event.dart';
 import 'package:integration_test_example_app/src/controller/bloc/sign_up/sign_up_bloc.dart';
 import 'package:integration_test_example_app/src/controller/bloc/sign_up/sign_up_event.dart';
 import 'package:integration_test_example_app/src/controller/bloc/sign_up/sign_up_state.dart';
@@ -162,7 +163,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             MaterialPageRoute(
                                 builder: (context) => BlocProvider<SignInBloc>(
                                       create: (context) =>
-                                          SignInBloc(DB.instance()),
+                                          SignInBloc(DB.instance())
+                                            ..add(GetSignInCredential()),
                                       child: const SignInScreen(),
                                     )));
                       },

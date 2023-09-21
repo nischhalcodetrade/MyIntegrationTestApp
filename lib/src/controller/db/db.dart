@@ -5,12 +5,14 @@ import '../../model/user_model.dart';
 import '../repo/repo.dart';
 
 class DB extends Repo {
-  final String userDetailsTable = 'UserDetails';
-  final String signedInUserTable = 'SignedInUserTable';
   DB._();
   static final DB _internal = DB._();
   static DB instance() => _internal;
+
+  final String userDetailsTable = 'UserDetails';
+  final String signedInUserTable = 'SignedInUserTable';
   late final Database _db;
+
   Future<void> initialize() async {
     var databasesPath = await getDatabasesPath();
     String path = '$databasesPath/demo.db';
@@ -19,7 +21,7 @@ class DB extends Repo {
       await db.execute(
           'CREATE TABLE $userDetailsTable (userName TEXT PRIMARY KEY, firstName TEXT, lastName TEXT, dob TEXT, password TEXT,  gender TEXT)');
       await db.execute(
-          'CREATE TABLE $signedInUserTable (userName TEXT PRIMARY KEY, password TEXT, isRememberMe BOOL)');
+          'CREATE TABLE $signedInUserTable (userName TEXT PRIMARY KEY, password TEXT, isRememberMe BOOL, alreadySignedIn BOOL)');
     });
   }
 
@@ -69,23 +71,40 @@ class DB extends Repo {
   }
 
   @override
-  Future<bool> removeSignInDetails() async {
-    int removeStatus = await _db.delete(
-      signedInUserTable,
-    );
-    if (removeStatus != 0 || (await _db.query(signedInUserTable)).isEmpty) {
-      return true;
+  Future<bool> signOut(String userName) async {
+    SignInModel signInModel = SignInModel.formJson((await _db.query(
+            signedInUserTable,
+            where: 'userName == ?',
+            whereArgs: [userName]))
+        .first);
+    if (signInModel.isRememberMe) {
+      int updateTable = await _db.update(
+          signedInUserTable, {'alreadySignedIn': false.toString()},
+          where: 'userName ==  ?',
+          whereArgs: [userName],
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      if (updateTable != 0) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      int removeStatus = await _db.delete(
+        signedInUserTable,
+      );
+      if (removeStatus != 0 || (await _db.query(signedInUserTable)).isEmpty) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
   @override
   Future<bool> saveSignInDetails(SignInModel signInModel) async {
-    int saveStatus = await _db.insert(
-      signedInUserTable,
-      signInModel.toJson(),
-    );
+    await _db.delete(signedInUserTable);
+    int saveStatus = await _db.insert(signedInUserTable, signInModel.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
     if (saveStatus != 0) {
       return true;
     } else {

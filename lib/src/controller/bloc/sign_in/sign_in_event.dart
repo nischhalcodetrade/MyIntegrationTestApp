@@ -6,3 +6,5 @@ class SignIn extends SignInEvent {
   SignIn(this.signInModel);
   final SignInModel signInModel;
 }
+
+class GetSignInCredential extends SignInEvent {}

@@ -1,3 +1,3 @@
 abstract class SplashEvent {}
 
-class AutoSignIn extends SplashEvent {}
+class GetSignInCredential extends SplashEvent {}

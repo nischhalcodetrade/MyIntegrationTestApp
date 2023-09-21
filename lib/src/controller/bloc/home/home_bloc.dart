@@ -8,7 +8,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final Repo repo;
   HomeBloc(this.repo) : super(HomeInitial()) {
     on<SignOut>((event, emit) async {
-      bool isRemoved = await repo.removeSignInDetails();
+      bool isRemoved = await repo.signOut(event.userName);
       if (isRemoved) {
         emit(SignOutSuccess());
       } else {
@@ -21,7 +21,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         bool isUserDeleted = await repo.removeUserDetail(event.userName);
         if (isUserDeleted) {
           emit(UserDeleteSuccess());
-          add(SignOut());
+          add(SignOut(event.userName));
         } else {
           emit(UserDeleteFailed(const ErrorModel(
               title: 'Delete User',

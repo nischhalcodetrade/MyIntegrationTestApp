@@ -8,5 +8,5 @@ abstract class Repo {
   Future<bool> removeUserDetail(String userName);
   Future<SignInModel?> getSignInDetails();
   Future<bool> saveSignInDetails(SignInModel signInModel);
-  Future<bool> removeSignInDetails();
+  Future<bool> signOut(String userName);
 }
