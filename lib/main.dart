@@ -5,6 +5,8 @@ import 'package:integration_test_example_app/src/controller/bloc/splash/splash_e
 import 'package:integration_test_example_app/src/controller/db/db.dart';
 import 'package:integration_test_example_app/src/view/splash_screen/splash_screen.dart';
 
+ final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DB.instance().initialize();
@@ -23,6 +25,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       home: BlocProvider<SplashBloc>(
           create: (context) =>
               SplashBloc(DB.instance())..add(GetSignInCredential()),
